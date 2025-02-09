@@ -1,0 +1,9 @@
+node_modules
+packages/libgen-api-service/.venv
+pnpm-lock.yaml
+pnpm-workspace.yaml
+packages/nextjs-app/public/file.svg
+packages/nextjs-app/public/globe.svg
+packages/nextjs-app/public/next.svg
+packages/nextjs-app/public/vercel.svg
+packages/nextjs-app/public/window.svg

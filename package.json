@@ -1,0 +1,18 @@
+{
+  "name": "Saraiva",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:api": "pnpm --filter libgen-api-service start",
+    "start:next": "pnpm --filter nextjs-app dev",
+    "start": "concurrently \"pnpm run start:api\" \"pnpm run start:next\"",
+    "install:all": "pnpm install -r"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
