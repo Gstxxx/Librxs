@@ -67,7 +67,7 @@ const BookList: React.FC<BookListProps> = ({ loading, results, error }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
               {displayedBooks.map((book, index) => (
                 <div
-                  key={book.ID}
+                  key={book.ID + index}
                   className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col w-[180px] h-full cursor-pointer"
                   ref={index === displayedBooks.length - 1 ? lastBookRef : null}
                 >
@@ -130,4 +130,4 @@ const BookList: React.FC<BookListProps> = ({ loading, results, error }) => {
   );
 };
 
-export default BookList; 
+export default BookList;

@@ -86,7 +86,7 @@ export default function Home() {
         <div className="container mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image
-              src="/logo.jpg"
+              src="/LX.svg"
               alt="Logo"
               width={50}
               height={50}
