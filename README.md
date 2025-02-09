@@ -3,7 +3,7 @@
 Download de livros gratuitos
 
 
-![logo](./logo.webp)   
+![logo](./logo.png)   
     
 ## Como Rodar o Projeto (libgen-api-service)
 
