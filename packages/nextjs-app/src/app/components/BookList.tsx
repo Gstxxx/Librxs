@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Book as BookType } from "@/app/types";
 import { BooksSkeleton } from "@/app/components/BookSkeleton";
 import Book from "@/app/components/Book";
+
 interface BookListProps {
   loading: boolean;
   results: BookType[] | null;
   error: string | null;
 }
 
-
 const BookList: React.FC<BookListProps> = ({ loading, results, error }) => {
   const [displayedBooks, setDisplayedBooks] = useState<BookType[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const lastBookRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     if (results) {
@@ -22,7 +20,7 @@ const BookList: React.FC<BookListProps> = ({ loading, results, error }) => {
     }
   }, [results]);
 
-  const loadMoreBooks = () => {
+  const loadMoreBooks = useCallback(() => {
     if (results && displayedBooks.length < results.length) {
       setIsLoadingMore(true);
       setTimeout(() => {
@@ -34,58 +32,55 @@ const BookList: React.FC<BookListProps> = ({ loading, results, error }) => {
         setIsLoadingMore(false);
       }, 500);
     }
-  };
+  }, [results, displayedBooks]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && results && displayedBooks.length < results.length) {
+        if (
+          entries[0].isIntersecting &&
+          results &&
+          displayedBooks.length < results.length
+        ) {
           loadMoreBooks();
         }
       },
       { threshold: 0.1 }
     );
 
-    if (lastBookRef.current) {
-      observer.observe(lastBookRef.current);
+    const currentLastBookRef = lastBookRef.current; // Copiando o valor atual
+
+    if (currentLastBookRef) {
+      observer.observe(currentLastBookRef);
     }
 
     return () => {
-      if (lastBookRef.current) {
-        observer.unobserve(lastBookRef.current);
+      if (currentLastBookRef) {
+        observer.unobserve(currentLastBookRef);
       }
     };
-  }, [displayedBooks, results]);
+  }, [displayedBooks, results, loadMoreBooks]);
 
   return (
-    <>
-      {loading ? (
-        <BooksSkeleton />
-      ) : (
-        <>
-          {error && <p className="text-red-500 text-center">Erro: {error}</p>}
-
-          {displayedBooks && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-              {displayedBooks.map((book, index) => (
-                <Book
-                  key={book.ID + index}
-                  book={book}
-                />
-
-              ))}
-            </div>
-          )}
-
-          {results && displayedBooks.length === 0 && (
-            <div className="text-center">
-              <p>Nenhum resultado encontrado.</p>
-            </div>
-          )}
-          {isLoadingMore && <p className="text-center">Carregando mais livros...</p>}
-        </>
+    <div className="mx-auto px-4 py-8">
+      {error && <p className="text-red-500">{error}</p>}
+      {results === null && !loading && (
+        <p className="text-gray-500">Nenhum resultado encontrado.</p>
       )}
-    </>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {displayedBooks.map((book, index) => (
+          <div
+            key={book.ID}
+            ref={index === displayedBooks.length - 1 ? lastBookRef : null}
+            className="flex justify-center"
+          >
+            <Book book={book} />
+          </div>
+        ))}
+        {loading && <BooksSkeleton />}
+        {isLoadingMore && <BooksSkeleton />}
+      </div>
+    </div>
   );
 };
 

@@ -22,7 +22,11 @@ export async function GET(request: NextRequest) {
     const data = await apiResponse.json();
     return NextResponse.json(data);
 
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Erro interno do servidor' }, { status: 500 });
+  } catch (error) {
+    let errorMessage = 'Erro interno do servidor';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-} 
+}

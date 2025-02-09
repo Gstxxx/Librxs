@@ -74,3 +74,11 @@ Este projeto usa um ambiente virtual Python para gerenciar dependências.
 
 8.  **Acessando**
     Abra [http://localhost:3000](http://localhost:3000) no seu browser
+
+
+    ### Preview
+
+    ![Preview](./preview.png)   
+
+    ### Preview Mobile
+    ![Preview](./preview_mobile.png)

@@ -2,6 +2,7 @@ import React from 'react';
 import { Book as BookType } from '@/app/types';
 import { Download, BookOpen, Calendar, Building2 } from 'lucide-react';
 import { cn } from '@/app/lib/utils';
+import Image from 'next/image';
 
 interface BookProps {
   book: BookType;
@@ -13,10 +14,12 @@ const Book: React.FC<BookProps> = ({ book }) => {
       {/* Book Cover */}
       <div className="relative h-full w-full overflow-hidden">
         {book.Cover ? (
-          <img
+          <Image
             src={book.Cover}
             alt={`Capa de ${book.Title}`}
-            className="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:blur-[2px]"
+            width={280}
+            height={400}
+            className="object-cover transition-all duration-500 group-hover:scale-110 group-hover:blur-[2px]"
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">

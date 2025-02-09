@@ -1,11 +1,14 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SearchBar from "@/app/components/SearchBar";
 import FilterBar from "@/app/components/FilterBar";
 import BookList from "@/app/components/BookList";
 import { Book } from "@/app/types";
 
+interface ErrorResponse {
+  error: string;
+}
 
 export default function Home() {
   const [results, setResults] = useState<Book[] | null>(null);
@@ -26,13 +29,17 @@ export default function Home() {
         )}&type=${encodeURIComponent(searchType)}`
       );
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json() as ErrorResponse;
         throw new Error(errorData.error || "Erro na pesquisa");
       }
       const data = await response.json();
       setResults(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Ocorreu um erro desconhecido");
+      }
       setResults(null);
     } finally {
       setLoading(false);
@@ -57,13 +64,17 @@ export default function Home() {
       const response = await fetch(url.toString());
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json() as ErrorResponse;
         throw new Error(errorData.error || "Erro na pesquisa filtrada");
       }
       const data = await response.json();
       setResults(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Ocorreu um erro desconhecido");
+      }
       setResults(null);
     } finally {
       setLoading(false);
@@ -83,7 +94,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 font-[family-name:var(--font-geist-sans)]">
       <header className="bg-white shadow-md py-4">
-        <div className="container mx-auto px-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 flex flex-wrap items-center justify-between">
+          {" "}
+          {/* Added flex-wrap */}
           <div className="flex items-center gap-4">
             <Image
               src="/LX.svg"
@@ -91,40 +104,43 @@ export default function Home() {
               width={50}
               height={50}
               className="rounded-full"
-
               priority
-
             />
-            <h1 className="text-2xl font-bold text-blue-400">Libr<span className="text-black">x</span>s</h1>
+            <h1 className="text-2xl font-bold text-blue-400">
+              Libr<span className="text-black">x</span>s
+            </h1>
           </div>
-
-          <SearchBar
-
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            handleKeyPress={handleKeyPress}
-            showFilters={showFilters}
-            handleSearch={handleSearch}
-            handleFilteredSearch={handleFilteredSearch}
-          />
-
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2 ml-4 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            {showFilters ? "Ocultar Filtros" : "Filtros"}
-          </button>
+          <div className="flex w-full mt-2 md:mt-0 md:w-auto">
+            {" "}
+            {/* Added w-full and mt-2 for mobile, md: for larger screens */}
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              handleKeyPress={handleKeyPress}
+              showFilters={showFilters}
+              handleSearch={handleSearch}
+              handleFilteredSearch={handleFilteredSearch}
+            />
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="px-4 py-2 ml-4 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              {showFilters ? "Ocultar Filtros" : "Filtros"}
+            </button>
+          </div>
         </div>
       </header>
 
       {showFilters && (
-        <FilterBar
-          searchType={searchType}
-          setSearchType={setSearchType}
-          filterQuery={filterQuery}
-          setFilterQuery={setFilterQuery}
-          handleKeyPress={handleKeyPress}
-        />
+        <div className="px-4">
+          <FilterBar
+            searchType={searchType}
+            setSearchType={setSearchType}
+            filterQuery={filterQuery}
+            setFilterQuery={setFilterQuery}
+            handleKeyPress={handleKeyPress}
+          />
+        </div>
       )}
 
       <main className="container mx-auto px-4 py-8">

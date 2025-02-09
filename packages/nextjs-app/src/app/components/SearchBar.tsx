@@ -9,6 +9,7 @@ interface SearchBarProps {
   handleFilteredSearch: () => void;
 }
 
+
 const SearchBar: React.FC<SearchBarProps> = ({
   searchQuery,
   setSearchQuery,
@@ -52,4 +53,4 @@ const SearchBar: React.FC<SearchBarProps> = ({
   );
 };
 
-export default SearchBar; 
+export default SearchBar;

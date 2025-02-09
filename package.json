@@ -1,13 +1,15 @@
 {
-  "name": "Saraiva",
+  "name": "librxs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Librxs is a platform for searching and downloading books from the Libgen library.",
   "main": "index.js",
   "scripts": {
     "start:api": "pnpm --filter libgen-api-service start",
     "start:next": "pnpm --filter nextjs-app dev",
-    "start": "concurrently \"pnpm run start:api\" \"pnpm run start:next\"",
-    "install:all": "pnpm install -r"
+    "start": "concurrently \"pnpm run start:api\" \"pnpm run start:next:prod\"",
+    "install:all": "pnpm install -r",
+    "build:next": "pnpm --filter nextjs-app build",
+    "start:next:prod": "pnpm --filter nextjs-app start"
   },
   "keywords": [],
   "author": "",
