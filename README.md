@@ -2,6 +2,9 @@
 
 Download de livros gratuitos
 
+
+![logo](./logo.webp)   
+    
 ## Como Rodar o Projeto (libgen-api-service)
 
 Este projeto usa um ambiente virtual Python para gerenciar dependências.
